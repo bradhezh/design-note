@@ -24,10 +24,10 @@ Types with Functions in C
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-void *ComNew(char const *text);
+void *ComNew(char const *text, int fontSize, int x, int y, int width, int height);
 void ComDelete(void *com);
 
-void ComRender(void *com, int x, int y);
+void ComRender(void *com);
 
 #endif // COMPONENT_H
 ```
@@ -39,17 +39,24 @@ void ComRender(void *com, int x, int y);
 
 #include "component.h"
 
-#define FONT_SIZE 20
+#define PADDING 4
 
 typedef struct {
   char *text;
+  int fontSize;
+  Rectangle rec;
 } Component;
 
-void *ComNew(char const *text) {
+void *ComNew(char const *text, int fontSize, int x, int y, int width, int height) {
   Component *com = malloc(sizeof(Component));
 
   com->text = malloc(sizeof(char) * (strlen(text) + 1));
   strcpy(com->text, text);
+  com->fontSize = fontSize;
+  com->rec.x = x;
+  com->rec.y = y;
+  com->rec.width = width;
+  com->rec.height = height;
 
   return com;
 }
@@ -59,8 +66,10 @@ void ComDelete(void *com) {
   free(com);
 }
 
-void ComRender(void *com, int x, int y) {
-  DrawText(((Component *)com)->text, x, y, FONT_SIZE, BLACK);
+void ComRender(void *com) {
+  Component *com0 = com;
+  DrawRectangleRec(com0->rec, GREEN);
+  DrawText(com0->text, com0->rec.x + PADDING, com0->rec.y + PADDING, com0->fontSize, BLACK);
 }
 ```
 
@@ -73,14 +82,18 @@ Classes in C++
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <raylib.h>
+
 class Component {
 public:
   char *text;
+  int fontSize;
+  Rectangle rec;
 
-  Component(char const *text);
+  Component(char const *text, int fontSize, int x, int y, int width, int height);
   ~Component();
 
-  void Render(int x, int y);
+  void Render();
 };
 
 #endif // COMPONENT_H
@@ -93,52 +106,68 @@ public:
 
 #include "component.h"
 
-#define FONT_SIZE 20
+#define PADDING 4
 
-Component::Component(char const *text) {
+Component::Component(char const *text, int fontSize, int x, int y, int width, int height) {
   this->text = (char *)malloc(sizeof(char) * (strlen(text) + 1));
   strcpy(this->text, text);
+  this->fontSize = fontSize;
+  this->rec.x = x;
+  this->rec.y = y;
+  this->rec.width = width;
+  this->rec.height = height;
 }
 
 Component::~Component() { free(this->text); }
 
-void Component::Render(int x, int y) {
-  DrawText(this->text, x, y, FONT_SIZE, BLACK);
+void Component::Render() {
+  DrawRectangleRec(this->rec, GREEN);
+  DrawText(this->text, this->rec.x + PADDING, this->rec.y + PADDING, this->fontSize, BLACK);
 }
 ```
 
 :::
 
-```cpp title="src/main.cpp or src/main.c" showLineNumbers {10-14,20-24,28-30}
+```cpp title="src/main.cpp or src/main.c" showLineNumbers {12-19,25-32,36-40}
 #include <raylib.h>
 
 #include "component.h"
 
+#define FONT_SIZE 20
 #define WIDTH 200
 #define HEIGHT 60
+#define MARGIN 8
 
 int main(void) {
-  InitWindow(WIDTH, HEIGHT, "Component");
+  InitWindow(WIDTH + MARGIN * 2, HEIGHT * 2 + MARGIN * 3, "Components");
+  // Reusable across different data of the type
   /* Class in C
-  void *com = ComNew("Component");
+  void *com1 = ComNew("Component 1", FONT_SIZE, MARGIN, MARGIN, WIDTH, HEIGHT);
+  void *com2 = ComNew("Component 2", FONT_SIZE, MARGIN, HEIGHT + MARGIN * 2, WIDTH, HEIGHT);
   */
   // C++
-  Component com("Component");
+  Component com1("Component 1", FONT_SIZE, MARGIN, MARGIN, WIDTH, HEIGHT);
+  Component com2("Component 2", FONT_SIZE, MARGIN, HEIGHT + MARGIN * 2, WIDTH, HEIGHT);
 
   EnableEventWaiting();
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(WHITE);
+    // Reusable across different data of the type
     /* Class in C
-    ComRender(com, 0, 0);
+    ComRender(com1);
+    ComRender(com2);
     */
     // C++
-    com.Render(0, 0);
+    com1.Render();
+    com2.Render();
     EndDrawing();
   }
 
+  // Reusable across different data of the type
   /* Class in C
-  ComDelete(com);
+  ComDelete(com1);
+  ComDelete(com2);
   */
   CloseWindow();
   return 0;
