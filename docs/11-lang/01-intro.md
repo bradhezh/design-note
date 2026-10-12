@@ -173,3 +173,119 @@ int main(void) {
   return 0;
 }
 ```
+
+Note that the "window" logic in the `main` function can also be decomposed into an independent part with abstract interfaces to hide the implementation.
+
+```cpp title="src/window.h"
+#ifndef WINDOW_H
+#define WINDOW_H
+
+class Component;
+
+typedef struct _Coms {
+  Component *com;
+  _Coms *next;
+} Coms;
+
+class Window {
+public:
+  Coms *coms;
+
+  Window(int width, int height, char const *title);
+  ~Window();
+
+  void AddCom(Component *com);
+  void Run();
+};
+
+#endif // WINDOW_H
+```
+
+```cpp title="src/window.cpp"
+#include <raylib.h>
+#include <stdlib.h>
+
+#include "component.h"
+#include "window.h"
+
+Window::Window(int width, int height, char const *title) {
+  this->coms = NULL;
+  InitWindow(width, height, title);
+}
+
+Window::~Window() {
+  for (Coms *p = coms; p;) {
+    Coms *p0 = p;
+    p = p0->next;
+    free(p0);
+  }
+  CloseWindow();
+}
+
+void Window::AddCom(Component *com) {
+  Coms *p0 = (Coms *)malloc(sizeof(Coms));
+  p0->com = com;
+  p0->next = NULL;
+  if (!coms) {
+    coms = p0;
+    return;
+  }
+  Coms *p = coms;
+  for (; p->next; p = p->next)
+    ;
+  p->next = p0;
+}
+
+void Window::Run() {
+  EnableEventWaiting();
+  while (!WindowShouldClose()) {
+    BeginDrawing();
+    ClearBackground(WHITE);
+    for (Coms *p = coms; p; p = p->next) {
+      p->com->Render();
+    }
+    EndDrawing();
+  }
+}
+```
+
+```cpp title="src/component.h"
+...
+class Window;
+
+class Component {
+  ...
+  Component(char const *text, int fontSize, int x, int y, int width, int height, Window *win);
+  ...
+};
+...
+```
+
+```cpp title="src/component.cpp"
+...
+#include "window.h"
+...
+Component::Component(
+    char const *text, int fontSize, int x, int y, int width, int height, Window *win) {
+  ...
+  win->AddCom(this);
+}
+...
+```
+
+```cpp title="src/main.cpp"
+#include "component.h"
+#include "window.h"
+
+#define FONT_SIZE 20
+...
+int main(void) {
+  Window win(WIDTH + MARGIN * 2, HEIGHT * 2 + MARGIN * 3, "Components");
+  Component com1("Component 1", FONT_SIZE, MARGIN, MARGIN, WIDTH, HEIGHT, &win);
+  Component com2("Component 2", FONT_SIZE, MARGIN, HEIGHT + MARGIN * 2, WIDTH, HEIGHT, &win);
+
+  win.Run();
+
+  return 0;
+}
+```
