@@ -19,10 +19,11 @@ Looking into language mechanics and framework ergonomics, alongside typical and 
   - 1.4. [Rust — Pure Compilation](/lang/rust)  
     Metaprogramming: Templates vs. decorators  
     Rust's improvements over traditional templates, and how it achieves decorator-like declarative elegance in pure compilation via procedural macros and traits  
-    Cases: C++ templates, Rust procedural macros and traits, as well as Rust declarative frameworks such as Axum or Actix Web
+    Cases: C++ templates, Rust procedural macros and traits, as well as Rust declarative frameworks such as Axum and Actix Web
   - 1.5. [JavaScript — Value-Based Typing](/lang/javascript)  
-    As the other end of the spectrum, how value-based typing keeps the data-and-process paradigm effective  
-    Two parallel paradigms: Global objects + functions and decorator-based DI  
+    How dynamic typing evolves into being value-based  
+    How value-based typing keeps the data-and-process paradigm effective  
+    Two parallel styles: object-and-function and decorator-based DI  
     Cases: React, Express, Angular, and NestJS
   - 1.6. [Convergence](/lang/converge)  
     How modern languages borrow from and converge with each other for type safety, performance, and ergonomics  

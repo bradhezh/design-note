@@ -2,11 +2,11 @@
 title: 1.1. The Starting Point
 ---
 
-No matter which language is used, programming begins with functional design in logic terms. Decomposition and abstraction are general principles of design. Functionality can be decomposed into logically independent parts, where each part can be used via an abstract interface. Decomposition not only reduces complexity of functionality, but also isolates it from external changes, making it reusable across different tasks. For reusability, functionality should consist of fixed mechanisms with variable policies. On the other hand, abstraction hides both implementation complexity and differences between specific implementations, making tasks portable across different implementations. In other words, abstraction makes functionality updatable with the same interface. Through decomposition and abstraction, tasks are designed as layered functionalities.
+No matter which language is used, programming begins with functional design in logic terms. Decomposition and abstraction are general principles of design. Functionality can be decomposed into logically independent parts, where each part can be used via an abstract interface. Decomposition not only reduces the complexity of functionality, but also isolates it from external changes, making it reusable across different tasks. For reusability, functionality should consist of fixed mechanisms with variable policies. On the other hand, abstraction hides both implementation complexity and the differences between specific implementations, making tasks portable across different implementations. In other words, abstraction makes functionality updatable with the same interface. Through decomposition and abstraction, tasks are designed as layered functionalities.
 
-Languages provide various forms for functionality, resulting in different programming paradigms. Taking C as the starting baseline, the basic form is the function, which can be called via its interface and reused with different arguments. Note that in C, operations depend on memory layouts of data, and the language provides type semantics to determine data storage structures and valid operations. Functions are therefore reusable across different data instances of parameter types. Types with functions operating on them are actually the fundamental unit of design, which is provided as classes in C++, known as the object-oriented or class-based paradigm.
+Languages provide various forms for functionality, resulting in different programming paradigms. Taking C as the starting baseline, the basic form is the function, which can be called via its interface and reused with different arguments. Note that in C, operations depend on the memory layout of data, and the language provides the type semantics to determine data storage structures and valid operations. Functions therefore operate on their parameter types and then are reusable across different data instances of those types. Types paired with the functions operating on them actually serve as the fundamental unit of design, provided as classes in C++, forming the object-oriented or class-based paradigm.
 
-A GUI application can demonstrate design ideas discussed in this chapter. It is built on top of a simple graphics library — raylib.
+A GUI application can demonstrate general design ideas that this chapter tries to explain. It is built on top of a simple graphics library — raylib.
 
 ```bash title="raylib"
 # macOS
@@ -140,7 +140,7 @@ void Component::Render() {
 
 int main(void) {
   InitWindow(WIDTH + MARGIN * 2, HEIGHT * 2 + MARGIN * 3, "Components");
-  // Reusable across different data of the type
+  // Reusable across different instances of the type
   /* Class in C
   void *com1 = ComNew("Component 1", FONT_SIZE, MARGIN, MARGIN, WIDTH, HEIGHT);
   void *com2 = ComNew("Component 2", FONT_SIZE, MARGIN, HEIGHT + MARGIN * 2, WIDTH, HEIGHT);
@@ -153,7 +153,7 @@ int main(void) {
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(WHITE);
-    // Reusable across different data of the type
+    // Reusable across different instances of the type
     /* Class in C
     ComRender(com1);
     ComRender(com2);
@@ -164,7 +164,7 @@ int main(void) {
     EndDrawing();
   }
 
-  // Reusable across different data of the type
+  // Reusable across different instances of the type
   /* Class in C
   ComDelete(com1);
   ComDelete(com2);
