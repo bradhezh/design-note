@@ -1,10 +1,12 @@
 {
   "userWords": [
+    "callees",
     "cflags",
     "ifndef",
     "malloc",
     "raylib",
     "stdlib",
-    "strcpy"
+    "strcpy",
+    "updatability"
   ]
 }
