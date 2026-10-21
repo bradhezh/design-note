@@ -8,10 +8,10 @@ Looking into language mechanics and framework ergonomics, alongside typical and 
 - Chapter 1. [Language and Frameworks](/lang/intro)
   - 1.1. [The Starting Point](/lang/intro)  
     From general design ideas to the type system  
-    Cases: C as the baseline
+    Cases: C/C++ classes
   - 1.2. [Frameworks and Dynamic Types](/lang/dynamic)  
     Why and how types become dynamic for framework binding  
-    Cases: C++ virtual functions, Qt/GObject signal-slot mechanics, and Objective-C messaging
+    Cases: Callbacks, signals, and virtual functions in C/C++ and GObject
   - 1.3. [Decorators — Declarative Elegance](/lang/decorator)  
     How metaprogramming (metadata and reflection) emerges  
     How decorators make framework binding declarative  
@@ -23,8 +23,7 @@ Looking into language mechanics and framework ergonomics, alongside typical and 
   - 1.5. [JavaScript — Value-Based Typing](/lang/javascript)  
     How dynamic typing evolves into being value-based  
     How value-based typing keeps the data-and-process paradigm effective  
-    Two parallel styles: object-and-function and decorator-based DI  
-    Cases: React, Express, Angular, and NestJS
+    Two parallel styles: object-and-function and decorator-based DI
   - 1.6. [Convergence](/lang/converge)  
     How modern languages borrow from and converge with each other for type safety, performance, and ergonomics  
     Cases: Type inference and type checking, as well as JIT and AOT
