@@ -122,7 +122,7 @@ void Com::Render() const {
 
 ### Use of Component
 
-```cpp title="src/main.cpp or src/main.c" showLineNumbers {12-19,25-32,36-40}
+```cpp title="src/main.cpp or src/main.c" showLineNumbers {11-18,25-32,37-41}
 #include <raylib.h>
 
 #include "component.h"
@@ -237,7 +237,7 @@ void Win::Run() const {
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(WHITE);
-    for (ComNode *p = nodes; p; p = p->next) {
+    for (ComNode *p = this->nodes; p; p = p->next) {
       p->com->Render();
     }
     EndDrawing();

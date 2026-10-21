@@ -245,7 +245,7 @@ static void com_set_property(GObject *obj, guint id, GValue const *value, GParam
   case WIN:
     p = g_value_get_object(value);
     g_return_if_fail(p);
-    self->win = (Win *)p;
+    self->win = WIN_OBJ(p);
     g_object_add_weak_pointer(G_OBJECT(self->win), (gpointer *)&self->win);
     win_add_com(self->win, self);
     break;
