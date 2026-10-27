@@ -253,6 +253,103 @@ In fact, GTK also supports declarative UI descriptions.
 
 ### GTK with UI Descriptions
 
-```c
+```xml title="ui/main.ui"
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <object class="GtkWindow" id="window">
+    <property name="title">GTK4 Demo</property>
+    <property name="default-width">400</property>
+    <property name="default-height">200</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-top">24</property>
+        <property name="margin-bottom">24</property>
+        <property name="margin-start">24</property>
+        <property name="margin-end">24</property>
+        <child>
+          <object class="GtkEntry" id="message" />
+        </child>
+        <child>
+          <object class="GtkButton" id="toggle">
+            <property name="label">Greet</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
+```
 
+```xml title="resources.xml"
+<?xml version="1.0" encoding="UTF-8" ?>
+<gresources>
+  <gresource prefix="/gtk/demo">
+    <file alias="main.ui">ui/main.ui</file>
+  </gresource>
+</gresources>
+```
+
+```bash title="Compile with Resources"
+glib-compile-resources resources.xml --target=build/resources.c --generate-source
+gcc -Iinc `pkg-config --cflags gtk4` -o build/demo `find src -type f -name '*.c'` build/resources.c `pkg-config --libs gtk4`
+```
+
+```c title="main.c"
+#include <gtk/gtk.h>
+
+#include "controllers/main.h"
+
+#define GTK_APP_ON_ACTIVATE "activate"
+
+int main(int argc, char *argv[]) {
+  GtkApplication *app = gtk_application_new("gtk.demo", G_APPLICATION_DEFAULT_FLAGS);
+
+  g_signal_connect(app, GTK_APP_ON_ACTIVATE, G_CALLBACK(on_app_activate), NULL);
+  int status = g_application_run(G_APPLICATION(app), argc, argv);
+
+  g_object_unref(app);
+  return status;
+}
+```
+
+```c title="controllers/main.c"
+#include <gtk/gtk.h>
+
+#include "controllers/main.h"
+#include "hello/service.h"
+
+#define GTK_BTN_ON_CLICKED "clicked"
+
+static void on_toggle_clicked(GtkButton *toggle, gpointer editable) {
+  g_return_if_fail(toggle && editable);
+  GtkEditable *message = GTK_EDITABLE(editable);
+
+  if (!g_strcmp0(gtk_editable_get_text(message), "")) {
+    gtk_editable_set_text(message, hello());
+    gtk_button_set_label(toggle, "Clear");
+  } else {
+    gtk_editable_set_text(message, "");
+    gtk_button_set_label(toggle, "Greet");
+  }
+}
+
+void on_app_activate(GtkApplication *app, gpointer user_data) {
+  g_return_if_fail(app);
+  // GtkBuilder won't take ownership of windows and widgets, and windows (with contained widgets)
+  // should be destroyed via gtk_window_destroy instead of ref counts. By default, GTK also destroys
+  // windows on the "close-request" signal (e.g. the close button being clicked).
+  GtkBuilder *builder = gtk_builder_new_from_resource("/gtk/demo/main.ui");
+  GtkWindow *window = GTK_WINDOW(gtk_builder_get_object(builder, "window"));
+  GtkEntry *message = GTK_ENTRY(gtk_builder_get_object(builder, "message"));
+  GtkButton *toggle = GTK_BUTTON(gtk_builder_get_object(builder, "toggle"));
+
+  gtk_window_set_application(window, app);
+  g_signal_connect(toggle, GTK_BTN_ON_CLICKED, G_CALLBACK(on_toggle_clicked), message);
+  gtk_window_present(window);
+
+  g_object_unref(builder);
+}
 ```
