@@ -12,10 +12,13 @@ Looking into language mechanics and framework ergonomics, alongside typical and 
   - 1.2. [Frameworks and Dynamic Types](/lang/dynamic)  
     Why and how types become dynamic for framework binding  
     Cases: Callbacks, signals, and virtual functions in C/C++ and GObject
-  - 1.3. [Decorators — Declarative Elegance](/lang/decorator)  
-    How metaprogramming (metadata and reflection) emerges  
-    How decorators make framework binding declarative  
-    Cases: DI frameworks such as Java Spring Boot and C# ASP.NET Core
+  - 1.3. [Decorators, Reflection, and Metaprogramming](/lang/decorator)  
+    How decorators, reflection, and DI introduce a declarative style to web backend design  
+    How metaprogramming evolves with source generation  
+    Declarative vs. imperative  
+    Declarative GUI  
+    GUI architectures: MVC and MVVM  
+    Cases: ASP.NET Controllers and Minimal APIs, .NET XAML and Avalonia, as well as GTK
   - 1.4. [Rust — Pure Compilation](/lang/rust)  
     Metaprogramming: Templates vs. decorators  
     Rust's improvements over traditional templates, and how it achieves decorator-like declarative elegance in pure compilation via procedural macros and traits  
